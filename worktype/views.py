@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from django.http import Http404
+from django.contrib.auth import authenticate
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from worktype.models import WorkType
-from worktype.serializers import WorkTypeSerializer
+from worktype.models import WorkType, Category
+from worktype.serializers import WorkTypeSerializer, CategoryListSerializer
+
+from django.shortcuts import render
 
 class WorkTypeList(APIView):
     """
@@ -26,4 +29,16 @@ class WorkTypeList(APIView):
         return Response(serializer.errors, status = status.HTTP_501_NOT_IMPLEMENTED)
 
 
-    
+
+class CategoryList(APIView):
+
+    def get(self, request, format = None):
+        categories = Category.objects.order_by('-order').all()
+        serializers = CategoryListSerializer(categories, many = True)
+        return Response(serializers.data)
+
+    def post(self, request, format = None):
+        """
+            Not supported yet
+        """
+        return Response(serializer.errors, status = status.HTTP_501_NOT_IMPLEMENTED)

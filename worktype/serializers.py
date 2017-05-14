@@ -1,4 +1,4 @@
-from worktype.models import WorkType
+from worktype.models import WorkType, Category
 from rest_framework import serializers
 
 class WorkTypeSerializer(serializers.ModelSerializer):
@@ -8,7 +8,13 @@ class WorkTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkType
-        fields = ('id', 'name', 'description', 'icon')
+        fields = ('id', 'name', 'description', 'icon', 'price_type', 'price', 'order')
 
 
+class CategoryListSerializer(serializers.HyperlinkedModelSerializer):
 
+    worktypes = WorkTypeSerializer(many = True)
+
+    class Meta:
+        model = Category
+        fields = ('name', 'worktypes', 'order')

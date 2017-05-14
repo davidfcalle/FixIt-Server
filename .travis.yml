@@ -1,0 +1,24 @@
+language: python
+python:
+- '3.5'
+install: pip install -r requirements.txt
+before_script:
+- sudo /etc/init.d/postgresql restart
+- psql -c 'create database fixit;' -U postgres
+env:
+  matrix:
+  - POSTGRES_DATABASE=fixit POSTGRES_USER=postgres POSTGRES_HOST=localhost PACKAGE_VERSION="1.0.*" POSTGRES_PASSWORD=
+addons:
+  postgresql: "9.5"
+
+services:
+- rabbitmq
+- postgresql:9.5
+
+script: python3 manage.py migrate && python3 manage.py test
+
+export:
+  secure: VwWIf2kQteFHU1D2oPz6LajtOJym0r5gUKn8dNvKTWWbcIX6ayLeBnFso37hJcgiGb8FoZtBpRBf+sYgvApzZKe/fMfbCqZwtAIDE0uJ9croQSwqfoW5Hox7++M/3i0m2ygosK9WV4M/I3OAEfLVz6IxIYER/SUt81X1g9hDp2VqZ1I2CYynqErUGWe832404+NSCfLw2Nob+X9A8H6UV+lrmKYTagVEUm69HTWB9aIaHifYLK+/hgi4Xiq1zh/SvAOhd+/YkAAox9Oqy/7AC8g+eHcT6N5zPlKqmjUx4qVm6/aX6+OmIXzD//4SM4PF7FEYgNPg/kzOogITqxRi+sHBM4noAp2TnxfzRTtb9jCyTik6aIyL/oH+8PZsWS+SKQEQNw3/3Tgih0WBB2d65vxS6csR4WQ6lk0x/o4wToqOCxYa+GJjh7Gm2VjyJMPOPaW3vhzG9R3HMUo/dPWaHc4jOsVidYcwD2SNSCR0CEkK1UTEaywI+xu1Tmg+SYYfek9iiJgVLiRC+Ou0QNxTdGEEFFyOm25xivr21KWbyqEOzSVa8lXWE1sk6eW0zoyFkZF9wLU6btjSK+jY7D0HMa1kSJfHL9N1CP43hrYnXyusm/120L2u3M+nm/GnaK/SKJpn8E71jiPRQs0aJaNpk57QHGRHGYqs7S9foSlMRfI=
+notifications:
+  slack:
+    secure: nK/i8AFPNCjyk8jy4bVvocPuEZgEZ7fvApXkPPVrdk8+cWp48OUJUJ7VZkp0Tt6ulG0PBgTBuFYAeYWADzHjE9Iu+nfCcyFlxccD5VwTvh+pqJOp6sAAfPWKX8t0QFWpUMQ0lZs7ouJn5tUNM/rX275zqEmxVtJwNI5ezf6NK6L0JgfSuYf2qjv52bNHi8ayP0mybh5l/QtkdmSGQ/RzThAtAAD6yZr1VcTGktr63megCZgkyYhPpTWnjW4CxLW3lVFkSpSb0U+jh1eoS5gbSlA3E5/6V2UikqsP9ctjZwjE22H4cA5u4OxHUad/Pr6nlnBQeIf6KHtr+LYaerO95ROBuPnp07SDdobPmkglZWn81RDEjKinE/GimYCl2Iktkn6K7UoA4+yqruW6hTMN7cRck9kWvthiO1FS3VahvgIsIyl9b3EvQXBzRsQMsaPE22S+ktlVWPh6YN/+Tp0JEdkDmowQFKBT+OMHDNuK9BOP128c++wKoJd83kOGjTBA5XlGT3k+QE2uow6V3LIZ8+7cXgV9Q/uYLPXI6vxEe0p8TilRc8zgHCioFm9owOhE1/E08WdYSEGbfx6YmI3/Y7KlibNR8Doy1xP9Rhb4fVBVzUWbLm8t+pFoVLCT04aTasv9Gah+WW5U3rxjZOHEkmfNfiQMEwNWMCEZKQJN9VQ=
